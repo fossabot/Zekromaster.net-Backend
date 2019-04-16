@@ -20,7 +20,9 @@ import { prop, Typegoose } from 'typegoose';
 
 export class PageGetter {
   static async getAllPages(): Promise<Page[]> {
-    return await PageModel.find({});
+    return (await PageModel.find({})).sort(
+      (a,b) => a.title > b.title ? 1 : -1
+    );
   }
 
   static async getPage(id: string): Promise<Page> {
