@@ -17,14 +17,16 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import * as express from 'express';
-import * as typegoose from 'typegoose';
 import { PageGetter } from './Pages/PageManager';
+import { OptImageGetter } from './OptImage/OptImageManager';
 
 export default class UserOperations {
-  static register(app: express.Express, prefix: string) {
+  static register(app: express.Express, prefixes: {pagePrefix: string, imgPrefix:string}) {
 
     // We need just two calls: one for all pages, and one for a single page
-    app.get(prefix + '/', async (_req, _res) => _res.send(await PageGetter.getAllPages()))
-    app.get(prefix + '/:id(*)', async (_req, _res)=> _res.send(await PageGetter.getPage(_req.params.id)))
+    app.get(prefixes.pagePrefix + '/', async (_req, _res) => _res.send(await PageGetter.getAllPages()))
+    app.get(prefixes.pagePrefix + '/:id(*)', async (_req, _res)=> _res.send(await PageGetter.getPage(_req.params.id)))
+    app.get(prefixes.imgPrefix + '/', async (_req, _res) => _res.send(await OptImageGetter.getOptImageList()))
+    app.get(prefixes.imgPrefix + '/:id(*)', async (_req, _res)=> _res.send(await OptImageGetter.getOptImage(_req.params.id)))
   }
 }

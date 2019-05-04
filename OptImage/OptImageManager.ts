@@ -16,25 +16,25 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
-import * as mongoose from 'mongoose';
+import { prop, Typegoose } from 'typegoose';
 
-import UserOperations from './UserOperations';
-import { CONFIG } from './config';
-
-export default class Backend {
-  static use(app: express.Express, prefix: string): void {
-    mongoose.connect(CONFIG.DB_URI);
-
-    app.use(bodyParser.urlencoded({extended: false}));
-
-    // Registering different categories of operations
-    UserOperations.register(app, {pagePrefix: prefix + "/pages", imgPrefix: prefix + "/images"});
-
+export class OptImageGetter {
+  static async getOptImageList(): Promise<string[]> {
+    return (await OptImageModel.find({})).map(x => x._id);
   }
 
-  static async close() {
-    await mongoose.connection.close();
+  static async getOptImage(id: string): Promise<string> {
+    return (await OptImageModel.findOne({_id: id})).image;
   }
 }
+
+export class OptImage extends Typegoose {
+  // ID is the in-api endpoint
+  @prop({required: true})
+  _id: string
+
+  @prop({required: true})
+  image: string;
+}
+
+export const OptImageModel = new OptImage().getModelForClass(OptImage, {schemaOptions: {collection: 'optimages'}});
