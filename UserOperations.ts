@@ -19,14 +19,16 @@
 import * as express from 'express';
 import { PageGetter } from './Pages/PageManager';
 import { OptImageGetter } from './OptImage/OptImageManager';
+import { JSONDataGetter } from './JSONData/JSONDataManager';
 
 export default class UserOperations {
-  static register(app: express.Express, prefixes: {pagePrefix: string, imgPrefix:string}) {
+  static register(app: express.Express, prefixes: {pagePrefix: string, imgPrefix:string, dataPrefix: string}) {
 
     // We need just two calls: one for all pages, and one for a single page
     app.get(prefixes.pagePrefix + '/', async (_req, _res) => _res.send(await PageGetter.getAllPages()))
     app.get(prefixes.pagePrefix + '/:id(*)', async (_req, _res)=> _res.send(await PageGetter.getPage(_req.params.id)))
     app.get(prefixes.imgPrefix + '/', async (_req, _res) => _res.send(await OptImageGetter.getOptImageList()))
     app.get(prefixes.imgPrefix + '/:id(*)', async (_req, _res)=> _res.send(await OptImageGetter.getOptImage(_req.params.id)))
+    app.get(prefixes.dataPrefix + '/:id(*)', async (_req, _res)=> _res.send(await JSONDataGetter.getJSONData(_req.params.id)))
   }
 }

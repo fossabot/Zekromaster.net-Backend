@@ -30,7 +30,7 @@ export default class Backend {
     app.use(bodyParser.urlencoded({extended: false}));
 
     // Registering different categories of operations
-    UserOperations.register(app, {pagePrefix: prefix + "/pages", imgPrefix: prefix + "/images"});
+    UserOperations.register(app, {pagePrefix: prefix + "/pages", imgPrefix: prefix + "/images", dataPrefix: "/data"});
 
   }
 

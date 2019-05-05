@@ -18,28 +18,24 @@
 
 import { prop, Typegoose } from 'typegoose';
 
-export class OptImageGetter {
-  static async getOptImageList(): Promise<string[]> {
-    return (await OptImageModel.find({})).map(x => x._id);
-  }
-
-  static async getOptImage(id: string): Promise<string> {
-    var optimage: OptImage = await OptImageModel.findOne({_id: id});
-    if (optimage) {
-        return optimage.image;
+export class JSONDataGetter {
+  static async getJSONData(id: string): Promise<any> {
+    var data: JSONData = await JSONDataModel.findOne({ _id: id });
+    if (data) {
+      return data.data;
     } else {
-      return ""
+      return {}
     }
   }
 }
 
-export class OptImage extends Typegoose {
+export class JSONData extends Typegoose {
   // ID is the in-api endpoint
-  @prop({required: true})
+  @prop({ required: true })
   _id: string
 
-  @prop({required: true})
-  image: string;
+  @prop({ required: true })
+  data: any;
 }
 
-export const OptImageModel = new OptImage().getModelForClass(OptImage, {schemaOptions: {collection: 'optimages'}});
+export const JSONDataModel = new JSONData().getModelForClass(JSONData, { schemaOptions: { collection: 'jsonData' } });
